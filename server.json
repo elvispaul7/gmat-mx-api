@@ -1,0 +1,18 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.elvispaul7/gmat-mx",
+  "title": "GMAT MX",
+  "description": "Official GMAT Focus percentiles, GMAC fees for Latin America, exam rules and practice questions",
+  "websiteUrl": "https://gmat.mx/api/",
+  "repository": {
+    "url": "https://github.com/elvispaul7/gmat-mx-api",
+    "source": "github"
+  },
+  "version": "1.0.0",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://api.gmat.mx/mcp"
+    }
+  ]
+}

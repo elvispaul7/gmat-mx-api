@@ -1,5 +1,7 @@
 # GMAT MX API
 
+[![gmat-mx-api MCP server](https://glama.ai/mcp/servers/elvispaul7/gmat-mx-api/badges/score.svg)](https://glama.ai/mcp/servers/elvispaul7/gmat-mx-api)
+
 Free, keyless JSON API and [MCP server](#mcp-server) with **verified GMAT (Focus Edition) facts** for Mexico and Latin America, maintained by [gmat.mx](https://gmat.mx/).
 
 - Official **score → percentile** table (GMAC, data period 2021–2026, n = 509,182)
