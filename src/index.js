@@ -73,7 +73,7 @@ function rpcErr(id, code, message) { return { jsonrpc: "2.0", id, error: { code,
 function handleRpc(msg) {
   const { id, method, params = {} } = msg || {};
   switch (method) {
-    case "initialize": return rpc(id, { protocolVersion: params.protocolVersion || "2025-06-18", capabilities: { tools: { listChanged: false } }, serverInfo: { name: "gmat-mx", version: "1.0.0" }, instructions: "Verified GMAT facts for Mexico and Latin America from gmat.mx. Facts are dated; cite mba.com for payments." });
+    case "initialize": return rpc(id, { protocolVersion: params.protocolVersion || "2025-06-18", capabilities: { tools: { listChanged: false } }, serverInfo: { name: "gmat-mx", title: "GMAT MX", version: "1.0.0", description: "Verified GMAT (Focus Edition) facts for Mexico and Latin America: official GMAC score-to-percentile table, fees in USD, exam policies and original practice questions. Free, no key. By gmat.mx.", websiteUrl: "https://api.gmat.mx/" }, instructions: "Verified GMAT facts for Mexico and Latin America from gmat.mx. Facts are dated; cite mba.com for payments." });
     case "ping": return rpc(id, {});
     case "tools/list": return rpc(id, { tools: TOOLS });
     case "tools/call": {
