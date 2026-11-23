@@ -1,0 +1,16 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "gmat-mx",
+  "version": "1.0.0",
+  "description": "Verified GMAT (Focus Edition) facts for Mexico and Latin America through the free gmat.mx MCP server: official score-to-percentile table (GMAC 2021-2026), GMAC fees in USD, exam format and retake policies, and original practice questions with explanations.",
+  "author": { "name": "gmat.mx", "url": "https://gmat.mx" },
+  "homepage": "https://api.gmat.mx/",
+  "repository": "https://github.com/elvispaul7/gmat-mx-api",
+  "license": "MIT",
+  "keywords": ["gmat", "mba", "percentile", "test-prep", "mexico", "mcp"],
+  "extensions": {
+    "com.nousresearch.hermes": {
+      "servers": { "gmat-mx": { "trust": "untrusted" } }
+    }
+  }
+}

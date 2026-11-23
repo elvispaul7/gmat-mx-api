@@ -114,6 +114,14 @@
             "description": "e.g. Problem Solving, Critical Reasoning, Data Sufficiency"
           },
           {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "A specific question id, e.g. q3"
+          },
+          {
             "name": "reveal",
             "in": "query",
             "schema": {
