@@ -1,0 +1,8 @@
+GMAT MX - Linear integrations directory assets
+
+linear-icon-color.png  320x320 colour icon (navy #0b3d91)
+linear-icon-white.png  320x320 monochrome white icon, transparent background
+linear-shot-1.png      1600x1000 featured image
+
+Caption for linear-shot-1.png:
+"The api.gmat.mx documentation page: keyless JSON endpoints and the MCP server at https://api.gmat.mx/mcp with four read-only GMAT tools."
