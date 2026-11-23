@@ -155,6 +155,41 @@ function mdToHtml(md) {
   }
   return out.join("\n");
 }
+
+function page(title, bodyMd) {
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>${title} | GMAT MX API</title><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><style>body{font:16px/1.55 system-ui,sans-serif;max-width:44rem;margin:2rem auto;padding:0 1rem;color:#1b1b1b}</style></head><body>${mdToHtml(bodyMd)}<p><a href="${BASE}/">GMAT MX API</a> · <a href="https://gmat.mx/">gmat.mx</a></p></body></html>`;
+}
+const PRIVACY_MD = `# Privacy policy
+
+**GMAT MX API** (api.gmat.mx) is operated by gmat.mx, a GMAT preparation service in Mexico.
+
+- The API and MCP server are public and keyless. We do not ask for accounts, names or e-mail addresses.
+- We store no personal data from API requests. Cloudflare, our hosting provider, keeps standard short-lived edge logs (IP address, user agent, request path) for security and abuse prevention.
+- Connections installed from third-party marketplaces (Notion, Linear, Make and similar) only let those tools call our public, read-only endpoints. We never read, store or modify content inside your workspace, and we never ask for write access.
+- No cookies are set. No analytics scripts run on api.gmat.mx.
+- Questions: hola@gmat.mx.
+
+Last updated: 23 November 2026.`;
+const TERMS_MD = `# Terms of use
+
+By using **GMAT MX API** (api.gmat.mx) you agree to these terms.
+
+- The service is provided free of charge, "as is", without warranty of any kind.
+- Facts are checked against official GMAC sources (mba.com) on the date shown in each response's \`verified_at\` field; always confirm fees and policies on mba.com before paying or registering.
+- Practice questions are original work of gmat.mx, licensed CC BY 4.0. Percentile data belongs to GMAC and is quoted for reference.
+- Please cache responses for at least one hour and do not exceed a few requests per second. Abusive traffic may be blocked.
+- gmat.mx is not affiliated with GMAC. GMAT is a registered trademark of the Graduate Management Admission Council.
+- Contact: hola@gmat.mx.
+
+Last updated: 23 November 2026.`;
+function oauthCallback(provider) {
+  return page(`Connected to ${provider}`, `# Connected
+
+Your ${provider} workspace is now linked to **GMAT MX**. This connection only lets ${provider} call our public, read-only GMAT data endpoints; nothing in your workspace is read or changed.
+
+You can close this window. Documentation: https://api.gmat.mx/ · Spanish guide: https://gmat.mx/api/`);
+}
+
 const DOCS = `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>GMAT MX API: free GMAT percentile, fees and practice-question API</title><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Free keyless JSON API and MCP server with verified GMAT Focus Edition data: official score-to-percentile table, GMAC fees for Mexico in USD, exam policies and original practice questions."><link rel="canonical" href="${BASE}/"><link rel="alternate" type="text/markdown" href="${BASE}/index.md"><link rel="llms-txt" href="${BASE}/llms.txt"><style>body{font:16px/1.55 system-ui,sans-serif;max-width:52rem;margin:2rem auto;padding:0 1rem;color:#1b1b1b}code,pre{background:#f3f3f3;border-radius:4px;padding:.1em .3em}pre{padding:.8em;overflow:auto}table{border-collapse:collapse}td,th{border:1px solid #ddd;padding:.3em .6em;text-align:left}blockquote{color:#555;border-left:3px solid #ccc;margin:0;padding:.2em .8em}</style></head><body>
 ${mdToHtml(DOCS_MD)}
 </body></html>`;
@@ -226,6 +261,10 @@ export default {
       case "/sitemap.xml": return new Response(`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${BASE}/</loc></url></urlset>`, { headers: { "content-type": "application/xml" } });
       case "/llms.txt": case "/llms-full.txt": return new Response(LLMS, { headers: { "content-type": "text/plain; charset=utf-8", "cache-control": "public, max-age=3600", ...CORS } });
       case "/index.md": case "/README.md": return new Response(DOCS_MD, { headers: { "content-type": "text/markdown; charset=utf-8", "cache-control": "public, max-age=3600", ...CORS } });
+      case "/privacy": return new Response(page("Privacy policy", PRIVACY_MD), { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "public, max-age=3600" } });
+      case "/terms": return new Response(page("Terms of use", TERMS_MD), { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "public, max-age=3600" } });
+      case "/oauth/notion/callback": return new Response(oauthCallback("Notion"), { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-store" } });
+      case "/oauth/linear/callback": return new Response(oauthCallback("Linear"), { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-store" } });
       case "/health": return json({ ok: true, verified_at: VERIFIED_AT }, 200, { "cache-control": "no-store" });
       default: return err(404, "Not found. See " + BASE + "/ for endpoints.");
     }
