@@ -46,7 +46,7 @@ const OPENAPI = {
     "/v1/fees": { get: { operationId: "getFees", summary: "GMAT fees in Mexico (USD): registration, reschedule, cancellation, score reports", responses: { 200: { description: "Fee schedule" } } } },
     "/v1/exam": { get: { operationId: "getExamPolicy", summary: "Exam format, timing, score scale, attempts and validity", responses: { 200: { description: "Exam facts" } } } },
     "/v1/questions/sample": { get: { operationId: "getSampleQuestion", summary: "One original practice question",
-      parameters: [{ name: "section", in: "query", schema: { type: "string", enum: ["quant", "verbal", "data"] } }, { name: "type", in: "query", schema: { type: "string" }, description: "e.g. Problem Solving, Critical Reasoning, Data Sufficiency" }, { name: "reveal", in: "query", schema: { type: "boolean", default: true }, description: "false hides answer and explanation" }],
+      parameters: [{ name: "section", in: "query", schema: { type: "string", enum: ["quant", "verbal", "data"] } }, { name: "type", in: "query", schema: { type: "string" }, description: "e.g. Problem Solving, Critical Reasoning, Data Sufficiency" }, { name: "id", in: "query", schema: { type: "string" }, description: "A specific question id, e.g. q3" }, { name: "reveal", in: "query", schema: { type: "boolean", default: true }, description: "false hides answer and explanation" }],
       responses: { 200: { description: "A question with choices, answer, explanation and trap analysis" } } } },
     "/v1/questions": { get: { operationId: "listQuestions", summary: "All practice questions", responses: { 200: { description: "Array of questions" } } } }
   }
@@ -57,7 +57,7 @@ const TOOLS = [
   { name: "score_to_percentile", description: "Convert a GMAT Focus Edition total score (205–805) to its official percentile ranking (GMAC, 2021–2026 data).", inputSchema: { type: "object", properties: { score: { type: "integer", minimum: 205, maximum: 805, description: "Total score, ends in 5, e.g. 655" } }, required: ["score"] } },
   { name: "get_gmat_fees", description: "GMAT fees in Mexico, Ecuador, Colombia and Peru in USD: registration (test center/online), reschedule and cancellation windows, additional score reports.", inputSchema: { type: "object", properties: {} } },
   { name: "get_exam_policy", description: "GMAT Focus Edition format: sections, questions, minutes, score scale, attempt limits, score validity.", inputSchema: { type: "object", properties: {} } },
-  { name: "get_sample_question", description: "One original GMAT-style practice question with answer, explanation and trap analysis. Filter by section (quant, verbal, data) or question type.", inputSchema: { type: "object", properties: { section: { type: "string", enum: ["quant", "verbal", "data"] }, type: { type: "string" }, reveal: { type: "boolean", default: true } } } }
+  { name: "get_sample_question", description: "One original GMAT-style practice question with answer, explanation and trap analysis. Filter by section (quant, verbal, data) or question type.", inputSchema: { type: "object", properties: { section: { type: "string", enum: ["quant", "verbal", "data"] }, type: { type: "string" }, id: { type: "string", description: "Return a specific question, e.g. q3" }, reveal: { type: "boolean", default: true } } } }
 ];
 function callTool(name, args = {}) {
   switch (name) {
@@ -221,7 +221,7 @@ export default {
       case "/v1/percentiles": return json(percentileTable());
       case "/v1/percentile": { const r = percentile(url.searchParams.get("score")); return r.error ? err(400, r.error) : json(r); }
       case "/v1/questions": return json({ count: QUESTIONS.length, license: "CC BY 4.0, gmat.mx", questions: QUESTIONS });
-      case "/v1/questions/sample": { const r = sampleQuestion({ section: url.searchParams.get("section"), type: url.searchParams.get("type"), reveal: url.searchParams.get("reveal") !== "false" }); return r.error ? err(404, r.error) : json(r, 200, { "cache-control": "no-store" }); }
+      case "/v1/questions/sample": { const r = sampleQuestion({ section: url.searchParams.get("section"), type: url.searchParams.get("type"), id: url.searchParams.get("id"), reveal: url.searchParams.get("reveal") !== "false" }); return r.error ? err(404, r.error) : json(r, 200, { "cache-control": "no-store" }); }
       case "/robots.txt": return new Response(`User-agent: *\nAllow: /\nSitemap: ${BASE}/sitemap.xml\n`, { headers: { "content-type": "text/plain" } });
       case "/sitemap.xml": return new Response(`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${BASE}/</loc></url></urlset>`, { headers: { "content-type": "application/xml" } });
       case "/llms.txt": case "/llms-full.txt": return new Response(LLMS, { headers: { "content-type": "text/plain; charset=utf-8", "cache-control": "public, max-age=3600", ...CORS } });
