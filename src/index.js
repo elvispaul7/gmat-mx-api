@@ -250,6 +250,7 @@ export default {
         return new Response(DOCS, { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "public, max-age=3600", vary: "accept", link: `<${BASE}/llms.txt>; rel="llms-txt", <${BASE}/index.md>; rel="alternate"; type="text/markdown"` } });
       }
       case "/openapi.json": return json(OPENAPI);
+      case "/.well-known/glama.json": return json({ "$schema": "https://glama.ai/mcp/schemas/connector.json", claim: "glama_claim_zYpdv1apI_6MmBQuShb0GYIFjjIZJHdG" });
       case "/.well-known/mcp.json": return json({ name: "gmat-mx", description: TOOLS.map(t => t.name).join(", "), url: `${BASE}/mcp`, transport: "streamable-http" });
       case "/v1/fees": return json(fees());
       case "/v1/exam": return json(exam());
