@@ -1,0 +1,1 @@
+{ "mcpServers": { "gmat-mx": { "url": "https://api.gmat.mx/mcp", "transport": "streamable-http" } } }

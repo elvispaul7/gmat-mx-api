@@ -1,0 +1,6 @@
+name = "gmat-mx-api"
+main = "src/index.js"
+compatibility_date = "2026-11-01"
+account_id = "ada89d7abbc6214d32fae5f7ecfd877a"
+workers_dev = true
+routes = [{ pattern = "api.gmat.mx", custom_domain = true }]

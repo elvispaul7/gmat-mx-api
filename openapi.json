@@ -1,0 +1,145 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "GMAT MX API",
+    "version": "1.0.0",
+    "description": "Free, keyless JSON API with verified GMAT (Focus Edition) facts for Mexico and Latin America: official score-to-percentile table, GMAC fees in USD, exam format and retake policies, and original practice questions. Data is checked against mba.com (GMAC) and dated. Maintained by gmat.mx.",
+    "contact": {
+      "name": "gmat.mx",
+      "url": "https://gmat.mx"
+    },
+    "license": {
+      "name": "MIT (code) / CC BY 4.0 (data)",
+      "url": "https://github.com/elvispaul7/gmat-mx-api"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.gmat.mx"
+    }
+  ],
+  "paths": {
+    "/v1/percentile": {
+      "get": {
+        "operationId": "scoreToPercentile",
+        "summary": "GMAT Focus total score to percentile",
+        "parameters": [
+          {
+            "name": "score",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 205,
+              "maximum": 805,
+              "multipleOf": 10
+            },
+            "example": 655
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Percentile for the score",
+            "content": {
+              "application/json": {
+                "example": {
+                  "score": 655,
+                  "percentile": 90
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid score"
+          }
+        }
+      }
+    },
+    "/v1/percentiles": {
+      "get": {
+        "operationId": "percentileTable",
+        "summary": "Full official score-to-percentile table",
+        "responses": {
+          "200": {
+            "description": "61 rows, 205 to 805"
+          }
+        }
+      }
+    },
+    "/v1/fees": {
+      "get": {
+        "operationId": "getFees",
+        "summary": "GMAT fees in Mexico (USD): registration, reschedule, cancellation, score reports",
+        "responses": {
+          "200": {
+            "description": "Fee schedule"
+          }
+        }
+      }
+    },
+    "/v1/exam": {
+      "get": {
+        "operationId": "getExamPolicy",
+        "summary": "Exam format, timing, score scale, attempts and validity",
+        "responses": {
+          "200": {
+            "description": "Exam facts"
+          }
+        }
+      }
+    },
+    "/v1/questions/sample": {
+      "get": {
+        "operationId": "getSampleQuestion",
+        "summary": "One original practice question",
+        "parameters": [
+          {
+            "name": "section",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "quant",
+                "verbal",
+                "data"
+              ]
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "e.g. Problem Solving, Critical Reasoning, Data Sufficiency"
+          },
+          {
+            "name": "reveal",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            },
+            "description": "false hides answer and explanation"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A question with choices, answer, explanation and trap analysis"
+          }
+        }
+      }
+    },
+    "/v1/questions": {
+      "get": {
+        "operationId": "listQuestions",
+        "summary": "All practice questions",
+        "responses": {
+          "200": {
+            "description": "Array of questions"
+          }
+        }
+      }
+    }
+  }
+}
